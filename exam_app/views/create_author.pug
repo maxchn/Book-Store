@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-4.offset-md-4.mt-5.mb-5
+        - if(error)
+            .alert.alert-danger #{error}
+        
+        form#createAuthor(action='/author/create', method='post')
+            .form-group
+                label(for='fullname') Full Name:
+                span.text-danger *
+                input#fullname.form-control(type='text', name='fullname', placeholder='Enter Full Name', autofocus='')
+                div.invalid-feedback Field is required
+            a.btn.btn-secondary.mr-2(href='/author/index') Back
+            button.btn.btn-primary(type='submit') Create

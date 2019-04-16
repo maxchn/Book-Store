@@ -1,0 +1,156 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='description' content='Book Shop')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  
+  title #{title}
+  
+  link(rel='icon' href='/img/core-img/favicon.ico')
+  
+  link(rel='stylesheet' href='/css/core-style.css')
+  link(rel='stylesheet' href='/css/style.css')
+  link(rel="stylesheet", href="/css/toastr.min.css")
+// ##### Header Area Start #####
+header.header_area
+  .classy-nav-container.breakpoint-off.d-flex.align-items-center.justify-content-between
+    // Classy Menu
+    nav#essenceNav.classy-navbar
+      // Logo
+      a.nav-brand(href='/')
+        img(src='/img/core-img/logo.png' alt='')
+      // Navbar Toggler
+      .classy-navbar-toggler
+        span.navbarToggler
+          span
+          span
+          span
+      // Menu
+      .classy-menu
+        // close btn
+        .classycloseIcon
+          .cross-wrap
+            span.top
+            span.bottom
+        // Nav Start
+        .classynav
+          ul            
+            li
+              a(href='/') Home
+            - if(user && user.role == 'admin')
+              li
+                a(href='/author/index') Authors
+              li
+                a(href='/publisher/index') Publishers
+              li
+                a(href='/category/index') Categories
+              li
+                a(href='/book/index') Books
+        // Nav End
+    // Header Meta Data
+    .header-meta.d-flex.clearfix.justify-content-end
+      // Search Area
+      .search-area
+        form#searchForm(method='post')
+          input#headerSearch(type='search' name='search' placeholder='Type for search')
+          button(type='submit')
+            i.fa.fa-search(aria-hidden='true')
+      - if(!user)
+        .user-login-info
+          a(href='/account/login')
+            img(src='/img/core-img/user.svg' alt='')
+      - else
+        .user-login-info
+          a(href='/account/logout') Logout
+
+block content
+//- // ##### Brands Area End #####
+// ##### Footer Area Start #####
+footer.footer_area.clearfix
+  .container
+    .row
+      // Single Widget Area
+      .col-12.col-md-6
+        .single_widget_area.d-flex.mb-30
+          // Logo
+          .footer-logo.mr-50
+            a(href='#')
+              img(src='/img/core-img/logo2.png' alt='')
+          // Footer Menu
+          .footer_menu
+            ul
+              li
+                a(href='shop.html') Shop
+              li
+                a(href='blog.html') Blog
+              li
+                a(href='contact.html') Contact
+      // Single Widget Area
+      .col-12.col-md-6
+        .single_widget_area.mb-30
+          ul.footer_widget_menu
+            li
+              a(href='#') Order Status
+            li
+              a(href='#') Payment Options
+            li
+              a(href='#') Shipping and Delivery
+            li
+              a(href='#') Guides
+            li
+              a(href='#') Privacy Policy
+            li
+              a(href='#') Terms of Use
+    .row.align-items-end
+      // Single Widget Area
+      .col-12.col-md-6
+        .single_widget_area
+          .footer_heading.mb-30
+            h6 Subscribe
+          .subscribtion_form
+            form(action='#' method='post')
+              input.mail(type='email' name='mail' placeholder='Your email here')
+              button.submit(type='submit')
+                i.fa.fa-long-arrow-right(aria-hidden='true')
+      // Single Widget Area
+      .col-12.col-md-6
+        .single_widget_area
+          .footer_social_area
+            a(href='#' data-toggle='tooltip' data-placement='top' title='Facebook')
+              i.fa.fa-facebook(aria-hidden='true')
+            a(href='#' data-toggle='tooltip' data-placement='top' title='Instagram')
+              i.fa.fa-instagram(aria-hidden='true')
+            a(href='#' data-toggle='tooltip' data-placement='top' title='Twitter')
+              i.fa.fa-twitter(aria-hidden='true')
+            a(href='#' data-toggle='tooltip' data-placement='top' title='Pinterest')
+              i.fa.fa-pinterest(aria-hidden='true')
+            a(href='#' data-toggle='tooltip' data-placement='top' title='Youtube')
+              i.fa.fa-youtube-play(aria-hidden='true')
+    .row.mt-5
+      .col-md-12.text-center
+        p
+          // Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0.
+          | Copyright &copy;
+          script.
+            document.write(new Date().getFullYear());
+          |  All rights reserved | This template is made with 
+          i.fa.fa-heart-o(aria-hidden='true')
+          |  by 
+          a(href='https://colorlib.com' target='_blank') Colorlib
+          // Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0.
+// ##### Footer Area End #####
+// jQuery (Necessary for All JavaScript Plugins)
+script(src='/js/jquery/jquery-2.2.4.min.js')
+// Popper js
+script(src='/js/popper.min.js')
+// Bootstrap js
+script(src='/js/bootstrap.min.js')
+// Plugins js
+script(src='/js/plugins.js')
+// Classy Nav js
+script(src='/js/classy-nav.min.js')
+// Active js
+script(src='/js/active.js')
+script(src='/js/script.js')
+script(src="/js/toastr/toastr.min.js")

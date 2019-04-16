@@ -1,0 +1,15 @@
+footer.footer_area {
+    margin-top: 40px;
+}
+
+div.container-m {
+    margin-top: 40px;
+}
+
+.book-image {
+    height: 200px;
+}
+
+.details-book-image {
+    max-height: 60vh;
+}

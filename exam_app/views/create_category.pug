@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-4.offset-md-4.mt-5.mb-5
+        - if(error)
+            .alert.alert-danger #{error}
+
+        form#createCategory(action='/category/create', method='post')
+            .form-group
+                label(for='category_name') Name:
+                span.text-danger *
+                input#category_name.form-control(type='text', name='name', placeholder='Enter name', autofocus='')
+            .form-group
+                label(for='category_parent') Parent:
+                select#category_parent.form-control(name='parent', placeholder='Select parent')
+                  option(value="-1", selected='') No Parent
+                  each val, index in categories
+                    option(value=val.id) #{val.name}
+            a.btn.btn-secondary.mr-1(href='/category/index') Back
+            button.btn.btn-primary(type='submit') Create

@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-12.mt-5
+        a.btn.btn-primary(href='/category/create') Create
+
+        table.table.table-striped.mt-3.mb-5
+          thead.thead-light
+            tr 
+              th Category ID
+              th Name
+              th Full Name
+              th Actions
+          tbody
+            - if(categories.length <= 0)
+                tr
+                  td.text-center.font-weight-bold(colspan='4') No Items
+              
+            each val, index in categories
+              tr
+                td=val.id
+                td=val.name
+                td=val.full_name
+                td
+                  a.btn.btn-warning.mb-2.ml-2(href='/category/update/' + val.id) Edit                  
+                  a.btn.btn-danger.mb-2.ml-2(href='/category/delete/' + val.id) Remove

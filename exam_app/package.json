@@ -1,0 +1,26 @@
+{
+  "name": "exam-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "express-fileupload": "^1.1.4",
+    "express-session": "^1.16.1",
+    "http-errors": "~1.6.2",
+    "md5": "^2.2.1",
+    "mongodb": "^3.2.3",
+    "mongoose": "^5.5.0",
+    "morgan": "~1.9.0",
+    "mysql": "^2.16.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.3",
+    "squel": "^5.12.2",
+    "uuid": "^3.3.2"
+  }
+}

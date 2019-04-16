@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-12.mt-5
+        a.btn.btn-primary( href='/book/create') Create
+        
+        table.table.table-striped.mt-3.mb-5
+            thead.thead-light
+                tr
+                    th ID
+                    th Name
+                    th Year
+                    th Pages
+                    th ISBN
+                    th Price
+                    th Publisher
+                    th Category
+                    th Authors
+                    th Actions
+            tbody
+              - if(books.length <= 0)
+                tr
+                  td.text-center.font-weight-bold(colspan='10') No Items
+
+              each val, index in books
+                  tr
+                      td=val.id
+                      td=val.name
+                      td=val.year_of_publishing
+                      td=val.pages
+                      td=val.isbn
+                      td=val.price
+                      td=val.publisher
+                      td=val.category
+                      td
+                        each author, idx in val.authors
+                          div #{author.full_name}
+                      td
+                          a.mt-2.mr-2.btn.btn-warning(href='/book/update/' + val.id) Edit
+                          a.mt-2.mr-2.btn.btn-danger(href='/book/delete/' + val.id) Remove

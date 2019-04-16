@@ -1,0 +1,49 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-4.offset-md-4.mt-5.mb-5
+        - if(error)
+            .alert.alert-danger #{error}
+
+        form#createPublisher(action='/publisher/create', method='post')
+            .form-group
+              label(for='publisher_name') Name:
+              span.text-danger *
+              input#publisher_name.form-control(type='text', name='name', placeholder='Enter name', autofocus='')
+              div.invalid-feedback Field is required
+            .form-group
+              label(for='publisher_country') Country:
+              span.text-danger *
+              input#publisher_country.form-control(type='text', name='country', placeholder='Enter country', list="coutries_list")
+              datalist#coutries_list
+                each country, idx in countries
+                  option(value=country.name)
+              div.invalid-feedback Field is required
+            .form-group
+              label(for='publisher_state') State:
+              span.text-danger *
+              input#publisher_state.form-control(type='text', name='state', placeholder='Enter state', list="states_list")
+              datalist#states_list
+                each state, idx in states
+                  option(value=state.name)
+              div.invalid-feedback Field is required
+            .form-group
+              label(for='publisher_city') City:
+              span.text-danger *
+              input#publisher_city.form-control(type='text', name='city', placeholder='Enter city', list="cities_list")
+              datalist#cities_list
+                each city, idx in cities
+                  option(value=city.name)
+              div.invalid-feedback Field is required
+            .form-group
+              label(for='publisher_street') Street and etc.:
+              span.text-danger *
+              input#publisher_street.form-control(type='text', name='street', placeholder='Enter street')
+              div.invalid-feedback Field is required
+            #publisherPhonesContainer.form-group
+            .form-group
+              button#addPhone.btn.btn-primary(type='button') Add Phone  
+            a.btn.btn-secondary.mr-1(href='/publisher/index') Back
+            button.btn.btn-primary(type='submit') Create

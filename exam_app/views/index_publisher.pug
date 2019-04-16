@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-12.mt-5
+        a.btn.btn-primary(href='/publisher/create') Create
+
+        table.table.table-striped.mt-3.mb-5
+          thead.thead-light
+            tr 
+              th Publisher ID
+              th Name
+              th Address
+              th Phones
+              th Actions
+          tbody
+            - if(publishers.length <= 0)
+                tr
+                  td.text-center.font-weight-bold(colspan='5') No Items
+              
+            each val, index in publishers
+              tr
+                td=val.id
+                td=val.name
+                td=val.country + ' ' + val.state + ' ' + val.city + ' ' + val.street
+                td 
+                  each phone, idx in val.phones
+                    div #{phone.phone_number}
+                td
+                  a.btn.btn-warning.mb-2.ml-2(href='/publisher/update/' + val.id) Edit                  
+                  a.btn.btn-danger.mb-2.ml-2.removePublisherBtn(href='/publisher/delete/' + val.id) Remove

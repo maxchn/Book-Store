@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-4.offset-md-4.mt-5.mb-5
+        - if(error)
+            .alert.alert-danger #{error}
+
+        form#updateCategory(action='/category/update', method='post')
+            input#categoryId(type='hidden', name='id' value=category.id)
+            input(type='hidden', id='parent_category_id' value=category.parent_category_id)
+            .form-group
+                label(for='category_name') Name:
+                span.text-danger *
+                input#category_name.form-control(type='text', name='name', value=category.name, placeholder='Enter name', autofocus='')
+                div.invalid-feedback Field is required
+            .form-group
+                label(for='category_parent') Parent:
+                select#category_parent.form-control(name='parent', placeholder='Select parent')
+                    option(value="-1", selected='') No Parent
+                    each val, index in categories
+                      option(value=val.id) #{val.name}
+                div.invalid-feedback Field is required
+            a.btn.btn-secondary.mr-1(href='/category/index') Back
+            button.btn.btn-primary(type='submit') Update

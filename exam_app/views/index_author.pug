@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-12.mt-5
+        a.btn.btn-primary(href='/author/create') Create
+        
+        table.table.table-striped.mt-3.mb-5
+            thead.thead-light
+                tr
+                    th Author ID
+                    th Full Name
+                    th Actions
+            tbody
+              - if(authors.length <= 0)
+                tr
+                  td.text-center.font-weight-bold(colspan='3') No Items
+
+              each val, index in authors
+                  tr
+                      td=val.id
+                      td=val.full_name
+                      td
+                          a.btn.btn-warning.mb-2.ml-2(href='/author/update/' + val.id) Edit
+                          a.btn.btn-danger.mb-2.ml-2.removeAuthorBtn(href='/author/delete/' + val.id) Remove

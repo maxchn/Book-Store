@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-4.offset-md-4.mt-5.mb-5
+        - if(error)
+            .alert.alert-danger #{error}
+
+        form#updateAuthor(action='/author/update', method='post')
+            input#authorId(type='hidden', name='id' value=author.id)
+            .form-group
+                label(for='fullname') Full Name:
+                span.text-danger *
+                input#fullname.form-control(type='text', name='fullname', value=author.full_name, placeholder='Enter Full Name', autofocus='')
+                div.invalid-feedback Field is required
+            a.btn.btn-secondary.mr-1(href='/author/index') Back
+            button.btn.btn-primary(type='submit') Update        

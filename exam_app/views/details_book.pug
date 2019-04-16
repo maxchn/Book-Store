@@ -1,0 +1,48 @@
+extends layout
+
+block content
+    // ##### Single Product Details Area Start #####
+    section.single_product_details_area.d-flex.align-items-center
+        // Single Product Thumb
+        .single_product_thumb.clearfix        
+            .product_thumbnail_slides.owl-carousel(style=`margin-left: 40px;`)
+                - if (photos && photos.length > 0)
+                    - if(photos.length > 1)
+                        each val, index in photos
+                            img(src=`/uploads/${val.name}` alt='Book Image', class='details-book-image')
+                    - else 
+                        img(src=`/uploads/${photos[0].name}` alt='Book Image', class='details-book-image')
+                        img(src=`/uploads/${photos[0].name}` alt='Book Image', class='details-book-image')
+                - else
+                    img(src=`/uploads/default_image.png` alt='Book Image', class='details-book-image')
+                    img(src=`/uploads/default_image.png` alt='Book Image', class='details-book-image')
+                
+        // Single Product Description
+        #book-details-container.single_product_desc.clearfix(data-id=id, style=`-webkit-box-flex: 0;
+  -ms-flex: 0 0 65%;
+  flex: 0 0 65%;
+  max-width: 65%;
+  width: 65%;
+  position: relative;
+  z-index: 1;`)
+            
+            span#authors
+            h2#book_name
+            p#book_price.product-price
+                        
+            dl.mt-3
+                dt Description:
+                dd 
+                    div#book_desc
+                dt.mt-3 Year published:
+                dd#year_publ
+                dt Pages:
+                dd#pages
+                dt ISBN:
+                dd#isbn
+                dt Publisher:
+                dd#publisher
+                dt Category:
+                dd#category
+    
+    // ##### Single Product Details Area End #####

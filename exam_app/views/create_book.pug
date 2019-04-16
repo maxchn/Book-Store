@@ -1,0 +1,74 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-10.col-sm-8.col-md-8.col-lg-4.col-xl-4.offset-1.offset-sm-2.offset-md-2.offset-lg-4.offset-xl-4.mt-5.mb-5
+        - if(error)
+            .alert.alert-danger #{error}
+
+        form#createBook(action='/book/create', method='post', enctype='multipart/form-data')
+            .form-group
+                label(for='book_name') Name:
+                span.text-danger *
+                input#book_name.form-control(type='text', name='name', placeholder='Enter name', autofocus='')
+                div.invalid-feedback Field is required
+            .form-group
+                label(for='book_short_description') Short Description:
+                span.text-danger *
+                input#book_short_description.form-control(type='text', name='short_description', placeholder='Enter short description')
+                div.invalid-feedback Field is required
+            .form-group
+                label(for='book_description') Description:
+                span.text-danger *
+                textarea#book_description.form-control(name='description', placeholder='Enter description')
+                div.invalid-feedback Field is required
+            .form-group
+                label(for='year_of_publishing') Year published:
+                span.text-danger *
+                select#year_of_publishing.form-control(name='year_of_publishing', placeholder='Enter year of publishing')
+                div.invalid-feedback Field is required
+            .form-group
+                label(for='pages') Pages:
+                span.text-danger *
+                input#pages.form-control(type='number', name='pages', min='1', max='100000', value='100')
+                div.invalid-feedback Field is required
+            .form-group
+                label(for='isbn') ISBN:
+                span.text-danger *
+                input#isbn.form-control(type='text', name='isbn', pattern='^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$', placeholder='xxx-x-xxxxx-xxx-x', title="Valid Format: xxx-x-xxxxx-xxx-x or xxxxxxxxxxxxx")
+                div.invalid-feedback Field is required
+            .form-group
+                label(for='price') Price:
+                span.text-danger *
+                input#price.form-control(type='number', name='price', min='1', value='100' step='0.1')
+                div.invalid-feedback Field is required
+            .form-group
+                label(for='category') Category:
+                span.text-danger *
+                select#category.form-control(name='category')
+                  each val, index in categories
+                    option(value=val.id) #{val.name}
+            .form-group
+                label(for='publisher') Publisher:
+                span.text-danger *
+                select#publisher.form-control(name='publisher')
+                  each val, index in publishers
+                    option(value=val.id) #{val.name}
+            .form-group
+                label(for='author') Author:
+                span.text-danger *
+                select#author.form-control(name='authors')
+                    option(value="-1")
+                    option(value="0") Enter New Author
+                    each val, index in authors
+                        option(value=val.id) #{val.full_name}
+            #authors-container
+            .form-group
+                button#addAuthorBtn.btn.btn-primary(type='button') Add Author
+            #files-container
+            .form-group
+                button#addFilesBtn.btn.btn-primary(type='button') Add File
+
+            a.btn.btn-secondary.mr-1(href='/book/index') Back
+            button.btn.btn-primary(type='submit') Create

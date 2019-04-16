@@ -1,0 +1,37 @@
+extends layout
+
+block content
+    div(class="container")
+        div(class="row")
+            div(class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-4 offset-1 offset-sm-2 offset-md-3 offset-lg-4 offset-xl-4")
+                br
+                br
+                br
+                h1 #{title}
+                br
+                
+                form(action="/account/register", method="post" id="signUpForm")
+                    - if(error)
+                        div(class="alert alert-danger", role="alert") #{error}
+                    div(class="form-group")
+                        label(for="username") Username
+                        span(class="text-danger") *
+                        input(type="text", class="form-control", id="username", name="username", placeholder="Enter username", autofocus="autofocus")
+                        div(class="invalid-feedback") Field is required                    
+                    div(class="form-group")
+                        label(for="password") Password
+                        span(class="text-danger") *
+                        input(type="password", class="form-control", id="password", name="password", placeholder="Enter password")
+                        div(class="invalid-feedback") Password length must be more 6 symbols
+                    div(class="form-group")
+                        label(for="confirmpassword") Confirm password
+                        span(class="text-danger") *
+                        input(type="password", class="form-control", id="confirmpassword", name="confirmpassword", placeholder="Confirm password")
+                        div(class="invalid-feedback") Passwords do not match
+                    
+
+                    button(type="submit", class="btn btn-primary btn-block") Sign up
+                
+                br
+                p(class="text-center") Already registered? 
+                    a(href="/account/login") Sign in

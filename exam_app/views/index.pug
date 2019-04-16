@@ -1,0 +1,44 @@
+extends layout
+
+block content
+  // ##### Breadcumb Area Start #####
+  .breadcumb_area.bg-img(style='background-image: url(img/bg-img/breadcumb.jpg);')
+    .container.h-100
+      .row.h-100.align-items-center
+        .col-12
+          .page-title.text-center
+            h2 books
+  // ##### Breadcumb Area End #####
+  // ##### Shop Grid Area Start #####
+  section.shop_grid_area.section-padding-80
+    .container
+      .row
+        .col-12.col-md-4.col-lg-3
+          .shop_sidebar_area
+            // ##### Single Widget #####
+            .widget.catagory.mb-50
+              // Widget Title
+              h6.widget-title.mb-30 Categories
+              // Catagories
+              .catagories-menu
+                ul#menu-categories.menu-content.collapse.show            
+            // ##### Single Widget #####
+            .widget.brands.mb-50
+              // Widget Title 2
+              h6.widget-title.mb-30 Authors              
+              .widget-desc
+                ul#menu-authors
+            .widget.mb-50
+              a.btn.essence-btn(href='/') Clear Filter
+        .col-12.col-md-8.col-lg-9
+          .shop_grid_product_area
+            .row
+              .col-12
+                .product-topbar.d-flex.align-items-center.justify-content-between
+                  // Total Products
+                  .total-products
+                    p
+                      span#books_count 0
+                      |  products found                  
+            #books-container.row
+      // ##### Shop Grid Area End #####
