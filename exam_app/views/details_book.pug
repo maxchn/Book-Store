@@ -9,10 +9,10 @@ block content
                 - if (photos && photos.length > 0)
                     - if(photos.length > 1)
                         each val, index in photos
-                            img(src=`/uploads/${val.name}` alt='Book Image', class='details-book-image')
+                            img(src=`${val.name}` alt='Book Image', class='details-book-image')
                     - else 
-                        img(src=`/uploads/${photos[0].name}` alt='Book Image', class='details-book-image')
-                        img(src=`/uploads/${photos[0].name}` alt='Book Image', class='details-book-image')
+                        img(src=`${photos[0].name}` alt='Book Image', class='details-book-image')
+                        img(src=`${photos[0].name}` alt='Book Image', class='details-book-image')
                 - else
                     img(src=`/uploads/default_image.png` alt='Book Image', class='details-book-image')
                     img(src=`/uploads/default_image.png` alt='Book Image', class='details-book-image')

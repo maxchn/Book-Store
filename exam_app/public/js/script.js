@@ -504,6 +504,21 @@ $(document).ready(function () {
             }
         });
 
+        $.each($('.file-url-field'), (idx, val) => {
+            let value = $(val).val();
+
+            let ch = $(val).parent().find('label > input.checkbox-from-url');
+
+            if (!value || !value.trim()) {
+                if (ch.is(":checked")) {
+                    $(val).addClass('is-invalid');
+                    hasError = true;
+                }
+            } else {
+                $(val).removeClass('is-invalid');
+            }
+        });
+
         if (hasError) {
             e.preventDefault();
         }
@@ -568,6 +583,18 @@ $(document).ready(function () {
         $.each($('.new-author-field'), (idx, val) => {
             let value = $(val).val();
             formData.append('new_authors', value);
+        });
+
+        $.each($('.file-url-field'), (idx, val) => {
+            let value = $(val).val();
+
+            if (value && value.trim())
+                formData.append('file_urls', value);
+        });
+
+        $.each($('input[name=files_ids]'), (idx, val) => {
+            let value = $(val).val();
+            formData.append('files_ids', value);
         });
 
         return formData;
@@ -687,12 +714,31 @@ $(document).ready(function () {
         span.text('*');
         span.appendTo(main_container);
 
-        let input = $('<input>');
-        input.addClass('form-control file-field');
-        input.attr('name', 'files');
-        input.attr('type', 'file');
-        input.attr('accept', 'image/*');
-        input.appendTo(main_container);
+        let br = $('<br>');
+        br.appendTo(main_container);
+
+        let lFromUrl = $('<label><input type="checkbox" class="checkbox-from-url"/> From Url</label>');
+        lFromUrl.appendTo(main_container);
+
+        let inputUrl = $('<input>');
+        inputUrl.addClass('form-control file-url-field');
+        inputUrl.attr('name', 'file_urls');
+        inputUrl.attr('type', 'text');
+        inputUrl.attr('placeholder', 'Enter url');
+        inputUrl.css('display', 'none');
+        inputUrl.appendTo(main_container);
+
+        let errorContainer = $('<div>');
+        errorContainer.addClass('invalid-feedback');
+        errorContainer.text('Field is required');
+        errorContainer.appendTo(main_container);
+
+        let inputFile = $('<input>');
+        inputFile.addClass('form-control file-field');
+        inputFile.attr('name', 'files');
+        inputFile.attr('type', 'file');
+        inputFile.attr('accept', 'image/*');
+        inputFile.appendTo(main_container);
 
         let buttonsContainer = $('<div>');
         buttonsContainer.addClass('text-right');
@@ -711,7 +757,35 @@ $(document).ready(function () {
 
         main_container.appendTo($('#files-container'));
 
-        return input;
+        $('.checkbox-from-url').change((e) => {
+            let fileInput = $(e.target).parent().parent().children('input[type=file]');
+            let urlInput = $(e.target).parent().parent().children('input[type=text]');
+
+            if ($(e.target).is(":checked")) {
+                fileInput.css('display', 'none');
+                urlInput.css('display', 'block');
+            } else {
+                fileInput.css('display', 'block');
+                urlInput.css('display', 'none');
+            }
+        });
+
+        $(inputUrl).change((e) => {
+            let value = $(e.target).val();
+
+            if (value && value.trim()) {
+
+                if ($(e.target).parent().children('img').length <= 0) {
+                    createImageContainer(e.target, value);
+                }
+
+                $(e.target).parent().children('img').attr('src', value);
+            } else {
+                $(e.target).parent().children('img').remove();
+            }
+        });
+
+        return inputFile;
     }
 
     function createAuthorContainer() {
@@ -794,7 +868,7 @@ $(document).ready(function () {
                         $.each(data.photos, (idx, val) => {
                             let input = createFileContainer();
 
-                            createImageContainer(input, '/uploads/' + val.name);
+                            createImageContainer(input, val.name);
 
                             let photo_id_input = $('<input>');
                             photo_id_input.attr('type', 'hidden');
@@ -904,11 +978,11 @@ $(document).ready(function () {
 
                         if (val.photos.length > 0) {
                             if (val.photos.length > 1) {
-                                main_img.attr('src', `/uploads/${val.photos[0].name}`);
-                                hover_img.attr('src', `/uploads/${val.photos[1].name}`);
+                                main_img.attr('src', `${val.photos[0].name}`);
+                                hover_img.attr('src', `${val.photos[1].name}`);
                             } else {
-                                main_img.attr('src', `/uploads/${val.photos[0].name}`);
-                                hover_img.attr('src', `/uploads/${val.photos[0].name}`);
+                                main_img.attr('src', `${val.photos[0].name}`);
+                                hover_img.attr('src', `${val.photos[0].name}`);
                             }
                         } else {
                             main_img.attr('src', '/uploads/default_image.png');

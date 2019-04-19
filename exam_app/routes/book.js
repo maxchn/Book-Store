@@ -160,7 +160,8 @@ router.post('/create', async (req, res) => {
         publisher_id: req.body.publisher,
         category_id: req.body.category,
         authors: req.body.authors,
-        new_authors: req.body.new_authors
+        new_authors: req.body.new_authors,
+        url: req.body.file_urls
     };
 
     if (!validate(book)) {
@@ -218,6 +219,18 @@ router.post('/create', async (req, res) => {
                     if (resultAuthor && resultAuthor.insertId > 0) {
                         createRelationBookAuthor(result.insertId, resultAuthor.insertId);
                     }
+                }
+            }
+
+            if (book.url) {
+                if (book.url instanceof Array) {
+                    for (let url of books.url) {
+                        await db.query(`INSERT INTO \`photo\`(name, book_id) VALUES(?,?);`,
+                            [url, result.insertId]);
+                    }
+                } else {
+                    await db.query(`INSERT INTO \`photo\`(name, book_id) VALUES(?,?);`,
+                        [book.url, result.insertId]);
                 }
             }
 
@@ -320,7 +333,8 @@ router.post('/update', async (req, res) => {
         publisher_id: req.body.publisher,
         category_id: req.body.category,
         authors: req.body.authors,
-        new_authors: req.body.new_authors
+        new_authors: req.body.new_authors,
+        url: req.body.file_urls
     };
 
     if (!validate(book)) {
@@ -375,29 +389,66 @@ router.post('/update', async (req, res) => {
 
         // получаем все фото данной книги
         let files = await db.query('SELECT * FROM `photo` WHERE `book_id`=?', [book.id]);
-        // получаем все айдишники фото
+
+        // получаем все айдишники фото от клиента
         let filesIds = req.body.files_ids;
-        if (files && filesIds) {
-            for (let file of files) {
-                try {
-                    if (filesIds instanceof Array) {
-                        // если в списке айдишников отсутствует ид данной фотографии
-                        // то фотографию необходимо удалить
-                        if (!filesIds.find(i => i.id == file.id)) {
-                            await db.query('DELETE FROM `photo` WHERE `id`=?;', [file.id]);
-                            await removeFile(file);
+
+        if (files) {
+            if (filesIds) {
+                for (let file of files) {
+                    try {
+                        if (filesIds instanceof Array) {
+                            // если в списке айдишников отсутствует ид данной фотографии
+                            // то фотографию необходимо удалить
+                            if (!filesIds.find(i => i == file.id)) {
+                                await db.query('DELETE FROM `photo` WHERE `id`=?;', [file.id]);
+                                await removeFile(file);
+                            }
+                        } else {
+                            // если айдишники не совпадают
+                            // то фотографию необходимо удалить
+                            if (file.id != filesIds) {
+                                await db.query('DELETE FROM `photo` WHERE `id`=?;', [file.id]);
+                                await removeFile(file);
+                            }
                         }
-                    } else {
-                        // если айдишники не совпадают
-                        // то фотографию необходимо удалить
-                        if (file.id != filesIds) {
-                            await db.query('DELETE FROM `photo` WHERE `id`=?;', [file.id]);
-                            await removeFile(file);
+                    } catch (error) {
+                        console.log('Error (/book/update):');
+                        console.error(error);
+                    }
+                }
+            } else {
+                for (let file of files) {
+                    await db.query('DELETE FROM `photo` WHERE `id`=?;', [file.id]);
+                    await removeFile(file);
+                }
+            }
+        }
+
+        if (book.url) {
+            if (files) {
+                if (book.url instanceof Array) {
+                    for (let url of books.url) {
+                        if (!files.find(i => i == url)) {
+                            await db.query(`INSERT INTO \`photo\`(name, book_id) VALUES(?,?);`,
+                                [url, book.id]);
                         }
                     }
-                } catch (error) {
-                    console.log('Error (/book/update):');
-                    console.error(error);
+                } else {
+                    if (!files.find(i => i == book.url)) {
+                        await db.query(`INSERT INTO \`photo\`(name, book_id) VALUES(?,?);`,
+                            [book.url, book.id]);
+                    }
+                }
+            } else {
+                if (book.url instanceof Array) {
+                    for (let url of books.url) {
+                        await db.query(`INSERT INTO \`photo\`(name, book_id) VALUES(?,?);`,
+                            [url, book.id]);
+                    }
+                } else {
+                    await db.query(`INSERT INTO \`photo\`(name, book_id) VALUES(?,?);`,
+                        [book.url, book.id]);
                 }
             }
         }
@@ -544,7 +595,7 @@ async function createBookPhoto(file, book_id) {
         await moveFile(file, path.resolve('.', 'public', 'uploads', filename));
 
         await db.query(`INSERT INTO \`photo\`(name, book_id) VALUES(?,?);`,
-            [filename, book_id]);
+            [`/uploads/${filename}`, book_id]);
     }
 }
 
@@ -582,14 +633,18 @@ function moveFile(file, filename) {
 
 function removeFile(file) {
     return new Promise((resolve, reject) => {
-        let filePath = path.resolve('.', 'public', 'uploads', file.name);
+        if (!/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.test(file.name)) {
+            let filePath = path.resolve('.', 'public', 'uploads', file.name.replace('/uploads/', ''));
 
-        fs.unlink(filePath, function (err) {
-            if (err)
-                return reject(err);
+            fs.unlink(filePath, function (err) {
+                if (err)
+                    return reject(err);
 
+                resolve(true);
+            });
+        } else {
             resolve(true);
-        });
+        }
     });
 }
 
@@ -647,6 +702,20 @@ function validate(book) {
             }
         } else if (book.authors == -1) {
             return false;
+        }
+    }
+
+    if (book.url) {
+        if (book.url instanceof Array) {
+            for (let item of book.url) {
+                if (!item || !item.trim()) {
+                    return false;
+                }
+            }
+        } else {
+            if (!book.url || !book.url.trim()) {
+                return false;
+            }
         }
     }
 
